@@ -37,17 +37,15 @@ def removeNum(num, list):
     index = binarySearch(num, list)
     print("index is " + str(index))
     del list[index]
+    i = index
     if index > 0:
-        i = index - 1
         while(list[i] == num and i >= 0):
-            del list[i]
             i -= 1
-    print("list length minus 1 is " + str(len(list) -1))
-    if index <= len(list) - 1:
-        i = index
-        while(list[i] == num and i <= len(list) - 1):
-            del list[i]
-            i += 1
+        i+=1
+
+    while(i <= len(list) - 1 and list[i] == num):
+        del list[i]
+
     return list
 
 
@@ -128,7 +126,7 @@ print(graph)
 print(binarySearch(3, [1,2,2,3,7,8]))
 
 #testing removeNum function
-print(removeNum(6,[3,3,4,5,6,6]))
+print(removeNum(5,[3,3,4,5,5,6,6]))
 
 #testing merge function
 #print(merge([1,2,2],[2,2,10]))
