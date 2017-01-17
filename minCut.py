@@ -32,7 +32,6 @@ def contract(graph, node1, node2, edgeIndex):
 
     #delete node2
     del graph[node2]
-    return
 
 
 #replaces all instances of a number with a different number in a soreted list
@@ -82,7 +81,6 @@ def binarySearch(num, list):
             low = mid + 1
 
     print("error: index not found in binary search")
-    return
 
 
 #put two lists together preserving sorted order of both
@@ -123,7 +121,6 @@ def findNodeIndex(graph, nodeNum):
             low = mid + 1
 
     print("error: index not found")
-    return
 
 
 
