@@ -24,18 +24,37 @@ def contract(graph, node1, node2, edgeIndex):
     #remove self loops
     node1[1:] = removeNum(node1num, node1[1:])
 
-
     #set the neighbors of node2 to point to node1 instead
+    for neighbor in graph[node2][1:]:
+        neighborIndex = findNodeIndex(graph, neighbor)
+        graph[neighborIndex][1:] = replaceNum(node2num, node1num, graph[neighborIndex][1:])
+
 
     #delete node2
     del graph[node2]
     return
 
 
+#replaces all instances of a number with a different number in a soreted list
+def replaceNum(num, replacementNum, list):
+    index = binarySearch(num, list)
+    i = index
+    if index > 0:
+        while(list[i] == num and i >= 0):
+            i -= 1
+        i+=1
+
+    while(i <= len(list) - 1 and list[i] == num):
+        list[i] = replacementNum
+        i+=1
+
+    return list
+
+
+
 #removes all instances of a certain number from a sorted list
 def removeNum(num, list):
     index = binarySearch(num, list)
-    print("index is " + str(index))
     del list[index]
     i = index
     if index > 0:
@@ -126,7 +145,10 @@ print(graph)
 print(binarySearch(3, [1,2,2,3,7,8]))
 
 #testing removeNum function
-print(removeNum(5,[3,3,4,5,5,6,6]))
+#print(removeNum(5,[3,3,4,5,5,6,6]))
+
+#testing replaceNum function
+print(replaceNum(3,10,[3,3,4,5,5,6,6]))
 
 #testing merge function
 #print(merge([1,2,2],[2,2,10]))
