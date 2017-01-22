@@ -6,7 +6,7 @@ def minCut(graph):
         #pick an edge at random
         node1 = random.randint(0,len(graph)-1)
         edgeIndex = random.randint(1,len(graph[node1])-1)  #start at 1 rather than 0 cuz 0 has the node number rather than an edge
-        print(graph)
+        #print(graph)
         edge = graph[node1][edgeIndex]
         node2 = findNodeIndex(graph, edge)
 
@@ -21,7 +21,7 @@ def minCut(graph):
         return -1
 
 def contract(graph, node1, node2, edgeIndex):
-    print("contracting " + str(graph[node1]) + " and " + str(graph[node2]))
+    #print("contracting " + str(graph[node1]) + " and " + str(graph[node2]))
     node1num = graph[node1][0]
     node2num = graph[node2][0]
     #remove the edge we are contracting from node1
@@ -144,13 +144,7 @@ def findNodeIndex(graph, nodeNum):
 
 #load data into an array creating a sub-array at each index indicating which nodes the node at that
 #index is connected to
-f = open(sys.argv[1], 'r')
-graph = []
-for line in f:
-    graph.append(line.split())
-    graph[-1] = [int(i) for i in graph[-1]]
 
-print(graph)
 
 #testing random function
 #print(random.randint(0,5))
@@ -164,8 +158,25 @@ print(graph)
 #testing replaceNum function
 #print(replaceNum(6,10,[3,3,4,5,5,6,6]))
 
-print(minCut(graph))
-print(graph)
+lowest = 99999 #lazy way to keep track of what the lowest finding of mincut is
+
+for i in range(0,int(sys.argv[2])):
+    f = open(sys.argv[1], 'r')
+    graph = []
+    for line in f:
+        graph.append(line.split())
+        graph[-1] = [int(i) for i in graph[-1]]
+
+    currentMinCut = minCut(graph)
+
+    if currentMinCut < lowest:
+        lowest = currentMinCut
+    f.close()
+    print("iteration " + str(i))
+
+print(lowest)
+
+#print(graph)
 
 #testing merge function
 #print(merge([1,2,2],[2,2,10]))
