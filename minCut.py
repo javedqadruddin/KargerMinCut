@@ -5,29 +5,39 @@ def minCut(graph):
     while len(graph) > 2:
         #pick an edge at random
         node1 = random.randint(0,len(graph)-1)
-        edgeIndex = random.randint(1,len(graph[node]))  #start at 1 rather than 0 cuz 0 has the node number rather than an edge
-        edge = graph[node][edgeIndex]
-        node2 = graph[findNodeIndex(graph, edge)]
+        edgeIndex = random.randint(1,len(graph[node1])-1)  #start at 1 rather than 0 cuz 0 has the node number rather than an edge
+        print(graph)
+        edge = graph[node1][edgeIndex]
+        node2 = findNodeIndex(graph, edge)
 
-        contract(graph, node1, node2. edgeIndex)
+        contract(graph, node1, node2, edgeIndex)
+
+    firstRemainingNodeNum = graph[0][0]
+    secondRemainingNodeNum = graph[1][0]
+
+    if graph[0][1:].count(secondRemainingNodeNum) == graph[1][1:].count(firstRemainingNodeNum):
+        return graph[0][1:].count(secondRemainingNodeNum)
+    else:
+        return -1
 
 def contract(graph, node1, node2, edgeIndex):
-    node1num = node1[0]
-    node2num = node2[0]
+    node1num = graph[node1][0]
+    node2num = graph[node2][0]
     #remove the edge we are contracting from node1
-    del node1[edgeIndex]
+    del graph[node1][edgeIndex]
     #remove the edge we are contracting from node2
-    edgeIndex = binarySearch(node1num, node2)
-    del node2[edgeIndex]
+    edgeIndex = binarySearch(node1num, graph[node2])
+    del graph[node2][edgeIndex]
     #put the edges of node2 into node1 in sorted order
     graph[node1][1:] = merge(graph[node1][1:], graph[node2][1:])
     #remove self loops
-    node1[1:] = removeNum(node1num, node1[1:])
+    graph[node1][1:] = removeNum(node1num, graph[node1][1:])
 
     #set the neighbors of node2 to point to node1 instead
     for neighbor in graph[node2][1:]:
         neighborIndex = findNodeIndex(graph, neighbor)
-        graph[neighborIndex][1:] = replaceNum(node2num, node1num, graph[neighborIndex][1:])
+        if neighborIndex != -1:
+            graph[neighborIndex][1:] = replaceNum(node2num, node1num, graph[neighborIndex][1:])
 
 
     #delete node2
@@ -54,6 +64,9 @@ def replaceNum(num, replacementNum, list):
 #removes all instances of a certain number from a sorted list
 def removeNum(num, list):
     index = binarySearch(num, list)
+    print("input to removeNum is " + str(list))
+    if index == -1:
+        return list
     del list[index]
     i = index
     if index > 0:
@@ -80,7 +93,8 @@ def binarySearch(num, list):
         else:
             low = mid + 1
 
-    print("error: index not found in binary search")
+    #print("error: index not found in binary search")
+    return -1
 
 
 #put two lists together preserving sorted order of both
@@ -120,7 +134,8 @@ def findNodeIndex(graph, nodeNum):
         else:
             low = mid + 1
 
-    print("error: index not found")
+    #print("error: index not found")
+    return -1
 
 
 
@@ -139,19 +154,18 @@ print(graph)
 #print(random.randint(0,5))
 
 #testing the binarySearch function
-print(binarySearch(3, [1,2,2,3,7,8]))
+#print(binarySearch(3, [1,2,2,3,7,8]))
 
 #testing removeNum function
-#print(removeNum(5,[3,3,4,5,5,6,6]))
+#print(removeNum(2,[1,1,2,2,3,3]))
 
 #testing replaceNum function
-print(replaceNum(3,10,[3,3,4,5,5,6,6]))
+#print(replaceNum(3,10,[3,3,4,5,5,6,6]))
 
+print(minCut(graph))
+print(graph)
 #testing merge function
 #print(merge([1,2,2],[2,2,10]))
 
 
-#TODO: pick an edge at random
-#TODO: Contract that edge
-#TODO: eliminate self loops
 #TODO: do until only 2 nodes remain
