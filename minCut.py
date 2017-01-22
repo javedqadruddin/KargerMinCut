@@ -21,22 +21,22 @@ def minCut(graph):
         return -1
 
 def contract(graph, node1, node2, edgeIndex):
+    print("contracting " + str(graph[node1]) + " and " + str(graph[node2]))
     node1num = graph[node1][0]
     node2num = graph[node2][0]
     #remove the edge we are contracting from node1
-    del graph[node1][edgeIndex]
+    graph[node1][1:] = removeNum(node2num, graph[node1][1:])
     #remove the edge we are contracting from node2
-    edgeIndex = binarySearch(node1num, graph[node2])
-    del graph[node2][edgeIndex]
-    #put the edges of node2 into node1 in sorted order
-    graph[node1][1:] = merge(graph[node1][1:], graph[node2][1:])
+    graph[node2].remove(node1num)
+    #put the edges of node2 into node1
+    graph[node1] = graph[node1] + graph[node2][1:]
     #remove self loops
     graph[node1][1:] = removeNum(node1num, graph[node1][1:])
 
     #set the neighbors of node2 to point to node1 instead
     for neighbor in graph[node2][1:]:
         neighborIndex = findNodeIndex(graph, neighbor)
-        if neighborIndex != -1:
+        if neighborIndex != -1 and neighborIndex != node1:
             graph[neighborIndex][1:] = replaceNum(node2num, node1num, graph[neighborIndex][1:])
 
 
@@ -46,38 +46,40 @@ def contract(graph, node1, node2, edgeIndex):
 
 #replaces all instances of a number with a different number in a soreted list
 def replaceNum(num, replacementNum, list):
-    index = binarySearch(num, list)
-    i = index
-    if index > 0:
-        while(list[i] == num and i >= 0):
-            i -= 1
-        i+=1
-
-    while(i <= len(list) - 1 and list[i] == num):
-        list[i] = replacementNum
-        i+=1
-
-    return list
+    return [replacementNum if x==num else x for x in list]
+    # index = binarySearch(num, list)
+    # i = index
+    # if index > 0:
+    #     while(list[i] == num and i >= 0):
+    #         i -= 1
+    #     i+=1
+    #
+    # while(i <= len(list) - 1 and list[i] == num):
+    #     list[i] = replacementNum
+    #     i+=1
+    #
+    # return list
 
 
 
 #removes all instances of a certain number from a sorted list
 def removeNum(num, list):
-    index = binarySearch(num, list)
-    print("input to removeNum is " + str(list))
-    if index == -1:
-        return list
-    del list[index]
-    i = index
-    if index > 0:
-        while(list[i] == num and i >= 0):
-            i -= 1
-        i+=1
-
-    while(i <= len(list) - 1 and list[i] == num):
-        del list[i]
-
-    return list
+    return [i for i in list if i != num]
+    #index = binarySearch(num, list)
+    # print("input to removeNum is " + str(list))
+    # if index == -1:
+    #     return list
+    # del list[index]
+    # i = index
+    # if index > 0:
+    #     while(list[i] == num and i >= 0):
+    #         i -= 1
+    #     i+=1
+    #
+    # while(i <= len(list) - 1 and list[i] == num):
+    #     del list[i]
+    #
+    # return list
 
 
 
@@ -160,10 +162,11 @@ print(graph)
 #print(removeNum(2,[1,1,2,2,3,3]))
 
 #testing replaceNum function
-#print(replaceNum(3,10,[3,3,4,5,5,6,6]))
+#print(replaceNum(6,10,[3,3,4,5,5,6,6]))
 
 print(minCut(graph))
 print(graph)
+
 #testing merge function
 #print(merge([1,2,2],[2,2,10]))
 
